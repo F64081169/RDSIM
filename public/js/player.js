@@ -1,7 +1,7 @@
 // First-person controller: pointer-lock mouse look, WASD movement with
 // acceleration, sprinting, jumping, head bob and AABB collision.
 import * as THREE from 'three';
-import { ROOM } from '/shared/layout.js';
+import { ROOM } from '../../shared/layout.js';
 
 const EYE = 1.65;
 const RADIUS = 0.32;

@@ -6,7 +6,15 @@
 
 ![screenshot](docs/screenshot.png)
 
-## 快速開始
+## 線上直接玩
+
+**https://claude.ai/artifact/5XKQEUTCvejo3kdTXsFGSB**
+
+這是發佈在 claude.ai 上的版本，不需要伺服器：大家打開同一個連結就會出現在同一間實驗室（透過 Artifact 的即時 room 同步，其中一位玩家的瀏覽器自動擔任主機，主機離開時由下一位接手）。連結預設只有擁有者能開，請從頁面的 Share 選單分享給同事。
+
+重新建置並發佈：`npm run build:artifact` 會產生 `dist/rdsim.html`。
+
+## 快速開始（自架伺服器）
 
 ```bash
 npm install
@@ -51,7 +59,7 @@ npm start            # http://localhost:3000
 
 ```
 server/index.js     HTTP 靜態檔 + WebSocket，權威遊戲狀態（Sprint、任務、玩家、聊天）
-server/puzzles.js   五種任務的題目產生器與答案驗證
+shared/puzzles.js   五種任務的題目產生器與答案驗證（可用 seed 重現）
 shared/layout.js    伺服器與瀏覽器共用的實驗室配置（工作台位置、嚴重度、任務類型）
 public/js/world.js  以程式產生的 3D 實驗室：建築、家具、儀器、燈光、看板
 public/js/textures.js  Canvas 程序貼圖（地板、PCB、程式碼螢幕、示波器、天際線…）
@@ -59,6 +67,7 @@ public/js/player.js 第一人稱控制器（Pointer Lock、碰撞、頭部晃動
 public/js/avatars.js 其他玩家的角色模型、名牌、表情泡泡
 public/js/tasks.js  五種任務的互動介面
 public/js/main.js   渲染管線、網路事件、HUD、互動與主迴圈
+public/js/room-net.js  Artifact 版的無伺服器多人連線（選主機、同步、交接）
 ```
 
 畫面：ACES tone mapping、PCF 軟陰影（夕陽從西側窗戶照進來）、RoomEnvironment IBL 反射、UnrealBloom、自訂調色／暗角／色差／底片顆粒 shader。所有貼圖都由 Canvas 即時產生，沒有外部美術資源。暫停選單可以關閉高畫質模式；網址加上 `?lq` 直接以低畫質啟動。
@@ -66,7 +75,7 @@ public/js/main.js   渲染管線、網路事件、HUD、互動與主迴圈
 ## 測試
 
 ```bash
-npm test             # 題目可解性 + 兩個 WebSocket 客戶端的多人流程
+npm test             # 題目可解性、WebSocket 多人流程、Artifact room 多人流程（含主機交接）
 npm run screenshot   # 需先 npm start；用無頭 Chromium 從多個角度截圖到 screenshots/
 GALLERY=1 npm run screenshot   # 另外輸出五種任務介面的截圖
 ```

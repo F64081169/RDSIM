@@ -7,8 +7,9 @@
   "scripts": {
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
-    "test": "node scripts/smoke-test.js",
-    "screenshot": "node scripts/screenshot.js"
+    "test": "node scripts/smoke-test.js && node scripts/room-test.js",
+    "screenshot": "node scripts/screenshot.js",
+    "build:artifact": "node scripts/build-artifact.js"
   },
   "engines": {
     "node": ">=18"
@@ -17,5 +18,8 @@
   "dependencies": {
     "three": "0.169.0",
     "ws": "8.18.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
   }
 }

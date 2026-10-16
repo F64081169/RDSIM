@@ -2,7 +2,7 @@
 // dynamic in-world displays (Kanban board, dashboards, station markers).
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { ROOM, STATIONS, COFFEE, SEVERITY, operatorSpot } from '/shared/layout.js';
+import { ROOM, STATIONS, COFFEE, SEVERITY, operatorSpot } from '../../shared/layout.js';
 import * as TX from './textures.js';
 
 const { w: W, d: D, h: H } = ROOM;

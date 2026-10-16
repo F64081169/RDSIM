@@ -4,7 +4,7 @@
 //   npm run screenshot
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
-import { GENERATORS } from '../server/puzzles.js';
+import { GENERATORS } from '../shared/puzzles.js';
 
 const require = createRequire(import.meta.url);
 let chromium;

@@ -16,7 +16,7 @@ import {
   SPAWN,
   operatorSpot,
 } from '../shared/layout.js';
-import { GENERATORS, checkAnswer } from './puzzles.js';
+import { GENERATORS, checkAnswer } from '../shared/puzzles.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');

@@ -5,11 +5,12 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { STATIONS, SEVERITY, TASK_TYPES, STATION_KINDS, ROOM } from '/shared/layout.js';
+import { STATIONS, SEVERITY, TASK_TYPES, STATION_KINDS, ROOM } from '../../shared/layout.js';
 import { buildWorld } from './world.js';
 import { Player } from './player.js';
 import { Avatar } from './avatars.js';
 import { Net } from './net.js';
+import { RoomNet } from './room-net.js';
 import { TASK_UI } from './tasks.js';
 import { initAudio, sfx } from './audio.js';
 
@@ -238,7 +239,8 @@ function updateBursts(dt) {
 /* ------------------------------------------------------------------ */
 
 const player = new Player(camera, canvasEl, world.colliders);
-const net = new Net();
+// The claude.ai Artifact build has no server: it plays over the artifact's room.
+const net = window.RDSIM_ARTIFACT ? new RoomNet() : new Net();
 const state = {
   joined: false,
   myId: null,
@@ -262,7 +264,21 @@ const now = () => Date.now() + state.clockOffset;
 /* ------------------------------------------------------------------ */
 
 const COLORS = ['#4fc3f7', '#ff8a65', '#81c784', '#ba68c8', '#ffd54f', '#f06292', '#4db6ac', '#9575cd', '#e57373', '#aed581'];
-let chosenColor = localStorage.getItem('rdsim.color') || COLORS[Math.floor(Math.random() * COLORS.length)];
+const store = {
+  get(k) {
+    try {
+      return localStorage.getItem(k);
+    } catch {
+      return null;
+    }
+  },
+  set(k, v) {
+    try {
+      localStorage.setItem(k, v);
+    } catch {}
+  },
+};
+let chosenColor = store.get('rdsim.color') || COLORS[Math.floor(Math.random() * COLORS.length)];
 for (const c of COLORS) {
   const b = document.createElement('button');
   b.style.background = c;
@@ -273,7 +289,7 @@ for (const c of COLORS) {
   };
   $('colors').append(b);
 }
-$('name').value = params.get('name') || localStorage.getItem('rdsim.name') || '';
+$('name').value = params.get('name') || store.get('rdsim.name') || '';
 $('name').addEventListener('keydown', (e) => e.key === 'Enter' && join());
 $('join').onclick = join;
 
@@ -281,10 +297,8 @@ async function join() {
   if (state.joined) return;
   initAudio();
   const name = $('name').value.trim() || `工程師${Math.floor(Math.random() * 900 + 100)}`;
-  try {
-    localStorage.setItem('rdsim.name', name);
-    localStorage.setItem('rdsim.color', chosenColor);
-  } catch {}
+  store.set('rdsim.name', name);
+  store.set('rdsim.color', chosenColor);
   $('join').disabled = true;
   $('conn').textContent = '連線中…';
   try {

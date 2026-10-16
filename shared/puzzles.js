@@ -1,16 +1,30 @@
-// Puzzle generators. Each returns { title, pub, solution } where `pub` is sent
-// to the client and `solution` stays on the server for verification.
+// Puzzle generators. Each returns { title, pub, solution } where `pub` is shown
+// to the player and `solution` is used for verification. Shared by the Node
+// server and the in-browser host (artifact build), which regenerates a
+// puzzle deterministically from a seed via `generate(type, seed)`.
 
-const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-const randInt = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+let RAND = Math.random;
+const pick = (arr) => arr[Math.floor(RAND() * arr.length)];
+const randInt = (a, b) => a + Math.floor(RAND() * (b - a + 1));
 const shuffle = (arr) => {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(RAND() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
 };
+
+function mulberry32(seed) {
+  let s = seed >>> 0;
+  return () => {
+    s = (s + 0x6d2b79f5) >>> 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
 
 /* ------------------------------------------------------------------ */
 /* Code review: find the buggy line                                    */
@@ -579,5 +593,15 @@ export function checkAnswer(type, sol, ans) {
     }
     default:
       return { ok: false, msg: 'unknown task' };
+  }
+}
+
+export function generate(type, seed) {
+  const prev = RAND;
+  RAND = mulberry32(seed);
+  try {
+    return GENERATORS[type]();
+  } finally {
+    RAND = prev;
   }
 }

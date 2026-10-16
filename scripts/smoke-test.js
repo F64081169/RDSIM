@@ -3,7 +3,7 @@
 import { spawn } from 'node:child_process';
 import assert from 'node:assert/strict';
 import WebSocket from 'ws';
-import { GENERATORS, checkAnswer } from '../server/puzzles.js';
+import { GENERATORS, checkAnswer } from '../shared/puzzles.js';
 import { STATIONS, operatorSpot } from '../shared/layout.js';
 
 /* ---------- Puzzles ---------- */

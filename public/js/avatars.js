@@ -58,7 +58,9 @@ export class Avatar {
   }
 
   build(info) {
-    const seed = info.id * 7919;
+    let seed = 7;
+    for (const ch of String(info.id)) seed = (Math.imul(seed, 31) + ch.charCodeAt(0)) >>> 0;
+    seed %= 100003;
     const shirt = new THREE.MeshStandardMaterial({ color: info.color, roughness: 0.8 });
     const pants = new THREE.MeshStandardMaterial({ color: 0x2d3748, roughness: 0.9 });
     const skin = new THREE.MeshStandardMaterial({ color: SKINS[seed % SKINS.length], roughness: 0.7 });
