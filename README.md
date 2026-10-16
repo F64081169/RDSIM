@@ -53,7 +53,7 @@ npm start            # http://localhost:3000
 | UART 開機 log 除錯 | 序列埠除錯台 | 選對 baud rate 讓亂碼變成可讀的 log，再找出故障原因 |
 | 韌體燒錄 | JTAG 燒錄台 | 從一堆映像檔中挑出符合 Rev / MCU / Bootloader 的 `.hex`，並依正確順序燒錄 |
 
-答案都在伺服器端驗證，解答不會傳給瀏覽器（UART 任務除外，畫面需要知道正確 baud 才能顯示可讀的 log）。
+自架伺服器版的答案都在伺服器端驗證，解答不會傳給瀏覽器（UART 任務除外，畫面需要知道正確 baud 才能顯示可讀的 log）。線上 Artifact 版的題目以 seed 同步，懂得翻程式碼的玩家可以推出答案。
 
 ## 架構
 
